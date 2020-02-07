@@ -1,24 +1,48 @@
-# app
+# dockerとvue-cliを使ってvue.jsの開発環境を構築する
 
-## Project setup
+## イメージビルドとコンテナデプロイ
+### dockerコマンドを使用する場合
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
+$ docker build -t vue_app_image .
+$ docker run -v `pwd`:/usr/src/app -p 9050:9050 --name app -it -d vue_app_image
 ```
 
-### Compiles and minifies for production
+### docker-composeコマンドを使用する場合
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
+$ docker-compose up -d --build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## コンテナに入る
+### dockerの場合
+```
+$ docker exec -it app sh
+```
+
+### docker-composeの場合
+```
+docker-compose exec app sh
+```
+
+## vueプロジェクト立ち上げ
+```
+/usr/src/app # vue create .
+```
+
+## ローカルサーバ立ち上げ
+### ポート設定
+``` 
+# vue.conofig.js
+module.exports = {
+  devServer: {
+    port: 9050,
+    host: '0.0.0.0',
+    disableHostCheck: true,
+  },
+};
+```
+### 起動
+```
+/usr/src/app # npm run serve
+```
+http://localhost:9050 にアクセスして確認
+
